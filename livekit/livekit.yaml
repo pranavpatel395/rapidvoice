@@ -1,0 +1,19 @@
+# LiveKit Server — Production config
+# Matches your current /etc/livekit.yaml on rapidvoice.pro
+
+port: 7880
+
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 60000
+  # Tells LiveKit to detect and advertise the server's public IP (43.204.9.134)
+  # so browser ICE candidates resolve correctly
+  use_external_ip: true
+
+# Must match LIVEKIT_API_KEY / LIVEKIT_API_SECRET in your .env
+keys:
+  Vp9YxQ3zG7mK5nL8: r2W4tV6uY8xZ0qB2dF4gH6jK8mN0pQ2r
+
+logging:
+  level: info

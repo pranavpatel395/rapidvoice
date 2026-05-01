@@ -1,0 +1,7 @@
+# Never commit real secrets
+.env
+nginx/ssl/
+
+# Ignore subdirectories — they are separate git repos
+voiceapp/
+voiceapp_backend/
