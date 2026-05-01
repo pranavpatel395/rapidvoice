@@ -76,7 +76,7 @@ services:
       - ./livekit/livekit.yaml:/etc/livekit.yaml:ro
     ports:
       - "7881:7881"
-      - "50000-60000:50000-60000/udp"
+      - "50000-50200:50000-50200/udp"
     networks:
       - voiceapp_network
 

@@ -6,7 +6,7 @@ port: 7880
 rtc:
   tcp_port: 7881
   port_range_start: 50000
-  port_range_end: 60000
+  port_range_end: 50200
   # Tells LiveKit to detect and advertise the server's public IP (43.204.9.134)
   # so browser ICE candidates resolve correctly
   use_external_ip: true
