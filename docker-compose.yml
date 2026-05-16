@@ -75,7 +75,7 @@ services:
 
   # ─── LiveKit ─────────────────────────────────────────────────────────────────
   # 7880 is NOT published — nginx proxies it via /livekit/
-  # 7881 (TCP fallback) + 50000-59999/udp (WebRTC media) bypass nginx directly
+  # 7881 (TCP fallback) + 50000-50200/udp (WebRTC media) bypass nginx directly
   livekit:
     image: livekit/livekit-server:latest
     container_name: voiceapp_livekit
@@ -85,7 +85,7 @@ services:
       - ./livekit/livekit.yaml:/etc/livekit.yaml:ro
     ports:
       - "7881:7881"
-      - "50000-59999:50000-59999/udp"
+      - "50000-50200:50000-50200/udp"
     depends_on:
       - redis
     networks:
