@@ -15,8 +15,9 @@ sleep 5
 echo "Recreating egress worker..."
 docker compose up -d --force-recreate livekit-egress
 
-echo "Restarting nginx (refresh upstream IPs after app rebuilds)..."
-docker compose restart nginx
+echo "Reloading nginx (WebSocket + upstream DNS)..."
+docker compose up -d nginx
+docker compose exec nginx nginx -t && docker compose exec nginx nginx -s reload
 
 echo "--- egress logs (last 30 lines) ---"
 docker logs voiceapp_livekit_egress --tail 30
