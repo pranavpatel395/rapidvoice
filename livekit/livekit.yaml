@@ -8,9 +8,8 @@ rtc:
   # Must match docker-compose UDP publish and AWS security group (50000-50200)
   port_range_start: 50000
   port_range_end: 50200
-  # Tells LiveKit to detect and advertise the server's public IP (43.204.9.134)
-  # so browser ICE candidates resolve correctly
-  use_external_ip: true
+  # EC2 public IP (Elastic IP). Do not use use_external_ip here — STUN needs DNS inside Docker.
+  node_ip: 43.204.9.134
 
 # Must match LIVEKIT_API_KEY / LIVEKIT_API_SECRET in your .env
 keys:
