@@ -32,6 +32,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-voiceapp_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-voiceapp}
       JWT_SECRET: ${JWT_SECRET}
       LIVEKIT_URL: ws://livekit:7880
+      LIVEKIT_HTTP_URL: http://livekit:7880
       LIVEKIT_API_KEY: ${LIVEKIT_API_KEY}
       LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
@@ -64,9 +65,17 @@ services:
     networks:
       - voiceapp_network
 
+  # ─── Redis (LiveKit + Egress) ────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: voiceapp_redis
+    restart: unless-stopped
+    networks:
+      - voiceapp_network
+
   # ─── LiveKit ─────────────────────────────────────────────────────────────────
   # 7880 is NOT published — nginx proxies it via /livekit/
-  # 7881 (TCP fallback) + 50000-60000/udp (WebRTC media) bypass nginx directly
+  # 7881 (TCP fallback) + 50000-50200/udp (WebRTC media) bypass nginx directly
   livekit:
     image: livekit/livekit-server:latest
     container_name: voiceapp_livekit
@@ -77,6 +86,27 @@ services:
     ports:
       - "7881:7881"
       - "50000-50200:50000-50200/udp"
+    depends_on:
+      - redis
+    networks:
+      - voiceapp_network
+
+  # ─── LiveKit Egress (room composite → S3) ───────────────────────────────────
+  livekit-egress:
+    image: livekit/egress:latest
+    container_name: voiceapp_livekit_egress
+    restart: unless-stopped
+    environment:
+      EGRESS_CONFIG_BODY: |
+        api_key: ${LIVEKIT_API_KEY}
+        api_secret: ${LIVEKIT_API_SECRET}
+        ws_url: ws://livekit:7880
+        insecure: true
+        redis:
+          address: redis:6379
+    depends_on:
+      - livekit
+      - redis
     networks:
       - voiceapp_network
 

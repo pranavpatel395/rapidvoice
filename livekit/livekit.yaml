@@ -17,3 +17,7 @@ keys:
 
 logging:
   level: info
+
+# Required for server-side egress (room composite → S3)
+redis:
+  address: redis:6379
