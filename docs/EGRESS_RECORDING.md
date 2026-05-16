@@ -95,6 +95,19 @@ No multipart upload, no `MediaRecorder`, no S3 CORS from the app.
 | 409 | Egress already active for this room |
 | 403 | Wrong tenant / not owner |
 
+### Fix “Failed to start LiveKit egress” on server
+
+1. **LiveKit must run with Redis** (`livekit/livekit.yaml` + `redis` container). If LiveKit was up *before* Redis was added, recreate it:
+   ```bash
+   cd ~/rapidvoice/rapidvoice
+   git pull origin main
+   chmod +x scripts/restart-egress-stack.sh
+   ./scripts/restart-egress-stack.sh
+   ```
+2. Egress needs **`cap_add: SYS_ADMIN`** (in `docker-compose.yml`).
+3. `livekit/egress.docker.yaml` API keys must match `livekit/livekit.yaml` `keys:`.
+4. Check logs: `docker logs voiceapp_livekit_egress --tail 50`
+
 ## vs browser recording
 
 | | Browser (`recordingSource: browser`) | Egress (`egress`) |

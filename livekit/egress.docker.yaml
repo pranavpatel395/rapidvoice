@@ -1,0 +1,8 @@
+# Mounted into livekit-egress container. Keys must match livekit/livekit.yaml `keys:` block.
+api_key: Vp9YxQ3zG7mK5nL8
+api_secret: r2W4tV6uY8xZ0qB2dF4gH6jK8mN0pQ2r
+ws_url: ws://livekit:7880
+insecure: true
+
+redis:
+  address: redis:6379

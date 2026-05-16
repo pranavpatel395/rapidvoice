@@ -92,18 +92,18 @@ services:
       - voiceapp_network
 
   # ─── LiveKit Egress (room composite → S3) ───────────────────────────────────
+  # Room composite requires SYS_ADMIN. LiveKit must be running with Redis (see livekit.yaml).
   livekit-egress:
     image: livekit/egress:latest
     container_name: voiceapp_livekit_egress
     restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    shm_size: "2gb"
     environment:
-      EGRESS_CONFIG_BODY: |
-        api_key: ${LIVEKIT_API_KEY}
-        api_secret: ${LIVEKIT_API_SECRET}
-        ws_url: ws://livekit:7880
-        insecure: true
-        redis:
-          address: redis:6379
+      EGRESS_CONFIG_FILE: /etc/egress.yaml
+    volumes:
+      - ./livekit/egress.docker.yaml:/etc/egress.yaml:ro
     depends_on:
       - livekit
       - redis
