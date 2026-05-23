@@ -81,9 +81,6 @@ services:
     container_name: voiceapp_livekit
     restart: unless-stopped
     command: --config /etc/livekit.yaml
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
     volumes:
       - ./livekit/livekit.yaml:/etc/livekit.yaml:ro
     ports:
