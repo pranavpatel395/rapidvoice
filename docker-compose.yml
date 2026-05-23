@@ -87,9 +87,14 @@ services:
       - "7881:7881"
       - "50000-50200:50000-50200/udp"
     depends_on:
-      - redis
+      redis:
+        condition: service_started
     networks:
       - voiceapp_network
+    # Force Docker's embedded DNS so 'redis' / 'postgres' etc. resolve correctly
+    # even if the host's resolv.conf is a systemd-resolved stub (Ubuntu 22+)
+    dns:
+      - 127.0.0.11
 
   # ─── LiveKit Egress (room composite → S3) ───────────────────────────────────
   # Room composite requires SYS_ADMIN. LiveKit must be running with Redis (see livekit.yaml).
